@@ -13,12 +13,12 @@ class BaseDataSource(models.Model):
     security = models.ForeignKey(Security)
 
 
-class ExternalCSVDataSource(BaseDataSource):
+class ExternalFileDataSource(BaseDataSource):
     """
-    Gets CSV data from a URL. Methods to parse the CSV to be defined
+    Gets file data from a URL. Methods to parse the file to be defined
     by subclasses.
     """
-    csv_url = models.URLField()
+    file_url = models.URLField()
 
-    def csv_to_datapoints(self):
+    def data_to_datapoints(self):
         raise NotImplementedError
