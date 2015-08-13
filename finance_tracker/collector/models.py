@@ -19,6 +19,9 @@ class ExternalFileDataSource(BaseDataSource):
     Gets file data from a URL. Methods to parse the file to be defined
     by subclasses.
     """
+    class Meta:
+        abstract = True
+
     file_url = models.URLField()
 
     def read_file(self):
