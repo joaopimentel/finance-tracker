@@ -26,6 +26,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'tracker',
+    'collector',
 )
 
 MIDDLEWARE_CLASSES = (
