@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import requests
 from django.db import models
 
 from tracker.models import Security
@@ -19,6 +20,10 @@ class ExternalFileDataSource(BaseDataSource):
     by subclasses.
     """
     file_url = models.URLField()
+
+    def read_file(self):
+        r = requests.get(self.file_url)
+        return r.content
 
     def data_to_datapoints(self):
         raise NotImplementedError
