@@ -38,12 +38,15 @@ class ExternalFileDataSource(BaseDataSource):
         Expects a list of dicts with the keys:
             'timestamp', 'unit_value'
         """
+        num_created = 0
         for d in data:
-            SecurityDataPoint.objects.update_or_create(
+            obj, created = SecurityDataPoint.objects.update_or_create(
                 security=self.security,
-                timestamp=data['timestamp'],
-                defaults={'unit_value': data['unit_value']},
+                timestamp=d['timestamp'],
+                defaults={'unit_value': d['unit_value']},
             )
+            num_created += created
+        return num_created
 
 
 class SpecificXMLDataSource(ExternalFileDataSource):
