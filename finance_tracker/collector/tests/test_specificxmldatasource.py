@@ -23,7 +23,7 @@ SAMPLE_XML_CONTENT = '''
 
 @patch('collector.models.SpecificXMLDataSource.read_file',
        new=lambda x: SAMPLE_XML_CONTENT)
-class SpecificXLMDataSourceTest(TestCase):
+class SpecificXMLDataSourceTest(TestCase):
 
     def setUp(self):
         self.security = Security.objects.create(name='zed', isin='zed')
