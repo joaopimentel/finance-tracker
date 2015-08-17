@@ -53,3 +53,25 @@ class SpecificXMLDataSourceTest(TestCase):
         expected = datetime(2014, 10, 29, 9, 0, 0, tzinfo=timezone.utc)
         self.assertEqual(self.datasource.convert_date('29-10-2014'),
                          expected)
+
+    def test_iter_raw_to_datapoint_data(self):
+        raw = (
+            ('29-10-2014', '130,29'),
+            ('30-10-2014', '129,70'),
+            ('31-10-2014', '133,53'),
+        )
+        datapoint_data = self.datasource.iter_raw_to_datapoint_data(raw)
+        expected = [
+            dict(timestamp=datetime(2014, 10, 29, 9, 0, 0,
+                                    tzinfo=timezone.utc),
+                 unit_value=Decimal('130.29')),
+            dict(timestamp=datetime(2014, 10, 30, 9, 0, 0,
+                                    tzinfo=timezone.utc),
+                 unit_value=Decimal('129.70')),
+            dict(timestamp=datetime(2014, 10, 31, 9, 0, 0,
+                                    tzinfo=timezone.utc),
+                 unit_value=Decimal('133.53')),
+        ]
+        for val, expected in zip(datapoint_data, expected):
+            print val, expected
+            self.assertEqual(val, expected)

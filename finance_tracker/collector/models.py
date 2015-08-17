@@ -71,3 +71,8 @@ class SpecificXMLDataSource(ExternalFileDataSource):
         naive = datetime.strptime(date_str, '%d-%m-%Y')
         naive = naive.replace(hour=9)
         return timezone.make_aware(naive, timezone=timezone.utc)
+
+    def iter_raw_to_datapoint_data(self, iter_raw):
+        for date, val in iter_raw:
+            yield dict(timestamp=self.convert_date(date),
+                       unit_value=self.convert_val(val))
