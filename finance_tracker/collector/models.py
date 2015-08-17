@@ -8,7 +8,7 @@ from lxml import html
 import requests
 from django.db import models
 
-from tracker.models import Security
+from tracker.models import Security, SecurityDataPoint
 
 
 class BaseDataSource(models.Model):
@@ -33,8 +33,17 @@ class ExternalFileDataSource(BaseDataSource):
         r = requests.get(self.file_url)
         return r.content
 
-    def data_to_datapoints(self):
-        raise NotImplementedError
+    def data_to_datapoints(self, data):
+        """
+        Expects a list of dicts with the keys:
+            'timestamp', 'unit_value'
+        """
+        for d in data:
+            SecurityDataPoint.objects.update_or_create(
+                security=self.security,
+                timestamp=data['timestamp'],
+                defaults={'unit_value': data['unit_value']},
+            )
 
 
 class SpecificXMLDataSource(ExternalFileDataSource):
