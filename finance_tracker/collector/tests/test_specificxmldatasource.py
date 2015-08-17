@@ -6,7 +6,7 @@ from mock import patch
 from django.test import TestCase
 from django.utils import timezone
 
-from tracker.models import Security
+from tracker.models import Security, SecurityDataPoint
 from collector.models import SpecificXMLDataSource
 
 
@@ -74,3 +74,27 @@ class SpecificXMLDataSourceTest(TestCase):
         ]
         for val, expected in zip(datapoint_data, expected):
             self.assertEqual(val, expected)
+
+    def test_parse(self):
+        created = self.datasource.parse()
+        self.assertEqual(created, 3)
+        datapoints = SecurityDataPoint.objects.filter(security=self.security) \
+                                              .order_by('timestamp')
+        expected = [
+            dict(timestamp=datetime(2014, 10, 29, 9, 0, 0,
+                                    tzinfo=timezone.utc),
+                 unit_value=Decimal('130.29')),
+            dict(timestamp=datetime(2014, 10, 30, 9, 0, 0,
+                                    tzinfo=timezone.utc),
+                 unit_value=Decimal('129.70')),
+            dict(timestamp=datetime(2014, 10, 31, 9, 0, 0,
+                                    tzinfo=timezone.utc),
+                 unit_value=Decimal('133.53')),
+        ]
+        for d, e in zip(datapoints, expected):
+            self.assertEqual(d.timestamp, e['timestamp'])
+            self.assertEqual(d.unit_value, e['unit_value'])
+
+        # Second run, no datapoint should be created
+        created = self.datasource.parse()
+        self.assertEqual(created, 0)
