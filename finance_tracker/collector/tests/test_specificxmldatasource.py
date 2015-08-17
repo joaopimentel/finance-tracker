@@ -73,5 +73,4 @@ class SpecificXMLDataSourceTest(TestCase):
                  unit_value=Decimal('133.53')),
         ]
         for val, expected in zip(datapoint_data, expected):
-            print val, expected
             self.assertEqual(val, expected)
