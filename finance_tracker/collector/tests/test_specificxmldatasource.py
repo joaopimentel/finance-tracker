@@ -1,3 +1,4 @@
+from decimal import Decimal
 
 from mock import patch
 
@@ -39,3 +40,9 @@ class SpecificXLMDataSourceTest(TestCase):
         for expected, got in zip(self.datasource.iter_raw_data(),
                                  expected_raw_data):
             self.assertEqual(expected, got)
+
+    def test_convert_val(self):
+        conv = self.datasource.convert_val
+        self.assertEqual(conv('123,45'), Decimal('123.45'))
+        self.assertEqual(conv('123'), Decimal('123.0'))
+        self.assertEqual(conv('0,123'), Decimal('0.123'))

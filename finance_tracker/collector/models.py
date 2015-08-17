@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+from decimal import Decimal
+
 from lxml import html
 import requests
 from django.db import models
@@ -56,5 +58,8 @@ class SpecificXMLDataSource(ExternalFileDataSource):
                 continue
             yield vals[0].text_content(), vals[1].text_content()
 
+    def convert_val(self, val_str):
+        """ Converts str with decimal point ',' to Decimal """
+        return Decimal(val_str.replace(',', '.'))
 
 
