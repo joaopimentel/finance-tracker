@@ -1,8 +1,10 @@
+from datetime import datetime
 from decimal import Decimal
 
 from mock import patch
 
 from django.test import TestCase
+from django.utils import timezone
 
 from tracker.models import Security
 from collector.models import SpecificXMLDataSource
@@ -46,3 +48,8 @@ class SpecificXMLDataSourceTest(TestCase):
         self.assertEqual(conv('123,45'), Decimal('123.45'))
         self.assertEqual(conv('123'), Decimal('123.0'))
         self.assertEqual(conv('0,123'), Decimal('0.123'))
+
+    def test_convert_date(self):
+        expected = datetime(2014, 10, 29, 9, 0, 0, tzinfo=timezone.utc)
+        self.assertEqual(self.datasource.convert_date('29-10-2014'),
+                         expected)

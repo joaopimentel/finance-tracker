@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 
+from datetime import datetime
 from decimal import Decimal
+from django.utils import timezone
 
 from lxml import html
 import requests
@@ -62,4 +64,10 @@ class SpecificXMLDataSource(ExternalFileDataSource):
         """ Converts str with decimal point ',' to Decimal """
         return Decimal(val_str.replace(',', '.'))
 
-
+    def convert_date(self, date_str):
+        """
+        Converts a 'dd-mm-yyyy' str to a timezone-aware datetime, at 0900 UTC
+        """
+        naive = datetime.strptime(date_str, '%d-%m-%Y')
+        naive = naive.replace(hour=9)
+        return timezone.make_aware(naive, timezone=timezone.utc)
