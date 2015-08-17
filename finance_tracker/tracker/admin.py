@@ -9,7 +9,7 @@ class SecurityDataPointAdmin(admin.ModelAdmin):
     time_format.admin_order_field = 'timestamp'
     time_format.short_description = 'Timestamp'
 
-    list_display = ('time_format', 'security', 'unit_value', 'currency')
+    list_display = ('time_format', 'security', 'unit_value')
 
 
 admin.site.register(Security)
