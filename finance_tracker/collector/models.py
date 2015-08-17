@@ -88,3 +88,8 @@ class SpecificXMLDataSource(ExternalFileDataSource):
         for date, val in iter_raw:
             yield dict(timestamp=self.convert_date(date),
                        unit_value=self.convert_val(val))
+
+    def parse(self):
+        raw_data = self.iter_raw_data()
+        datapoint_data = self.iter_raw_to_datapoint_data(raw_data)
+        return self.data_to_datapoints(datapoint_data)
