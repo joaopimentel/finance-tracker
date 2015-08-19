@@ -1,5 +1,4 @@
 Django>=1.8,<1.9
 django12factor
 lxml
-mock
 requests
