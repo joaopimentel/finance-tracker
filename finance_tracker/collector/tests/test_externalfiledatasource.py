@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.test import TestCase
 from django.utils import timezone
+import responses
 
 from collector.models import ExternalFileDataSource
 from tracker.models import Security, SecurityDataPoint
@@ -33,3 +34,11 @@ class ExternalFileDataSourceTest(TestCase):
         for dp, expected in zip(sec_dps, data):
             self.assertEqual(dp.timestamp, expected['timestamp'])
             self.assertEqual(dp.unit_value, expected['unit_value'])
+
+    @responses.activate
+    def test_read_file(self):
+        responses.add(responses.GET, self.source.file_url,
+                      body=b'somecontent',
+                      content_type='application/octet-stream')
+        content = self.source.read_file()
+        self.assertEqual(content, 'somecontent')
