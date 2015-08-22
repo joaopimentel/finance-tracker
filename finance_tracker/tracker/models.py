@@ -15,7 +15,7 @@ class Security(models.Model):
     currency = models.CharField(max_length=3, default='EUR')
     detail_url = models.URLField(null=True, blank=True)
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '%s (%s)' % (self.name, self.isin)
 
 
@@ -29,7 +29,7 @@ class SecurityDataPoint(models.Model):
     class Meta:
         index_together = ['security', 'timestamp']
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '%s in %s: %s %s' % (
             self.security.name,
             self.timestamp,

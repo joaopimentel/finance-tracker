@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from datetime import datetime
 from decimal import Decimal
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 
 from lxml import html
 import requests
@@ -19,6 +20,7 @@ class BaseDataSource(models.Model):
     security = models.ForeignKey(Security)
 
 
+@python_2_unicode_compatible
 class ExternalFileDataSource(BaseDataSource):
     """
     Gets file data from a URL. Methods to parse the file to be defined
@@ -47,6 +49,9 @@ class ExternalFileDataSource(BaseDataSource):
             )
             num_created += created
         return num_created
+
+    def __str__(self):  # pragma: no cover
+        return '%s (%s)' % (self.security, self.file_url)
 
 
 class SpecificXMLDataSource(ExternalFileDataSource):
