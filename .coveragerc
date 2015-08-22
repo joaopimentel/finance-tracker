@@ -4,6 +4,8 @@ source = finance_tracker
 omit =
     */migrations/*
     */*tests*
+    finance_tracker/finance_tracker/wsgi.py
+    finance_tracker/*/admin.py
 
 [report]
 exclude_lines =
