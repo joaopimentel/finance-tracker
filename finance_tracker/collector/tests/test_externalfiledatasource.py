@@ -28,3 +28,8 @@ class ExternalFileDataSourceTest(TestCase):
         ]
         n = self.source.data_to_datapoints(data)
         self.assertEqual(n, 3)
+        sec_dps = SecurityDataPoint.objects.filter(security=self.security) \
+                                           .order_by('timestamp')
+        for dp, expected in zip(sec_dps, data):
+            self.assertEqual(dp.timestamp, expected['timestamp'])
+            self.assertEqual(dp.unit_value, expected['unit_value'])
