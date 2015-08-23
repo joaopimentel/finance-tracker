@@ -36,3 +36,33 @@ class SecurityDataPoint(models.Model):
             self.unit_value,
             self.security.currency,
         )
+
+
+@python_2_unicode_compatible
+class Portfolio(models.Model):
+
+    name = models.CharField(max_length=255)
+
+    def __str__(self):  # pragma: no cover
+        return '%s' % self.name
+
+
+@python_2_unicode_compatible
+class Position(models.Model):
+
+    security = models.ForeignKey(Security)
+    timestamp = models.DateTimeField()
+    units = models.DecimalField(max_digits=7, decimal_places=4)
+    portfolio = models.ForeignKey(Portfolio)
+
+    class Meta:
+        index_together = ['portfolio', 'timestamp']
+        ordering = ['timestamp']
+
+    def __str__(self):  # pragma: no cover
+        return '%s - %s in %s (%s units)' % (
+            self.portfolio,
+            self.security.name,
+            self.timestamp,
+            self.units,
+        )
