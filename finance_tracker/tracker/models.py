@@ -18,6 +18,15 @@ class Security(models.Model):
     def __str__(self):  # pragma: no cover
         return '%s (%s)' % (self.name, self.isin)
 
+    def get_datapoint_at_time(self, timestamp):
+        """
+        Gets the first SecurityDataPoint for this security that has the
+        timestamp greater or equal to ``timestamp``.
+        """
+        return SecurityDataPoint.objects.filter(security=self,
+                                                timestamp__gte=timestamp) \
+                                        .first()
+
 
 @python_2_unicode_compatible
 class SecurityDataPoint(models.Model):
