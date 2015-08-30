@@ -69,6 +69,15 @@ class PositionTest(TestCase):
                                  units=u,
                                  portfolio=self.portfolio)
             for u, t in zip(position_units, timestamps)]
-        self.assertEqual(get_security_units_for_portfolio(self.portfolio,
-                                                          self.sec),
-                         Decimal('0.5'))
+        total_units = get_security_units_for_portfolio(
+            self.portfolio, self.sec)
+        self.assertEqual(total_units, Decimal('0.5'))
+        # Test `until` param
+        total_units = get_security_units_for_portfolio(
+            self.portfolio, self.sec,
+            until=datetime(2014, 10, 27, 9, 0, 0, tzinfo=timezone.utc))
+        self.assertEqual(total_units, Decimal('4.0'))
+        total_units = get_security_units_for_portfolio(
+            self.portfolio, self.sec,
+            until=datetime(2014, 10, 28, 9, 0, 0, tzinfo=timezone.utc))
+        self.assertEqual(total_units, Decimal('2.5'))
