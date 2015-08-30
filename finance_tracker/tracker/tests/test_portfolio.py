@@ -26,11 +26,15 @@ class PositionTest(TestCase):
             datetime(2014, 10, 24, 9, 0, 0, tzinfo=timezone.utc),
             datetime(2014, 10, 27, 9, 0, 0, tzinfo=timezone.utc),
             datetime(2014, 10, 28, 9, 0, 0, tzinfo=timezone.utc),
+            datetime(2014, 10, 29, 9, 0, 0, tzinfo=timezone.utc),
+            datetime(2014, 10, 30, 9, 0, 0, tzinfo=timezone.utc),
         ]
         vals = [
             Decimal('1.0'),
             Decimal('1.5'),
             Decimal('2.0'),
+            Decimal('2.5'),
+            Decimal('3.0'),
         ]
         for t, v in zip(timestamps, vals):
             SecurityDataPoint.objects.create(security=self.sec,
@@ -45,11 +49,11 @@ class PositionTest(TestCase):
             portfolio=self.portfolio,
         )
         val = get_position_last_value(pos)
-        self.assertEqual(val, Decimal('2.0'))
+        self.assertEqual(val, Decimal('3.0'))
         # Change number of units for position
         pos.units = Decimal('3.0')
         val = get_position_last_value(pos)
-        self.assertEqual(val, Decimal('6.0'))
+        self.assertEqual(val, Decimal('9.0'))
 
     def test_total_units(self):
         position_units = [
