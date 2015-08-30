@@ -72,12 +72,12 @@ class PositionTest(TestCase):
         total_units = get_security_units_for_portfolio(
             self.portfolio, self.sec)
         self.assertEqual(total_units, Decimal('0.5'))
-        # Test `until` param
+        # Test `until` param (until is exclusive)
         total_units = get_security_units_for_portfolio(
             self.portfolio, self.sec,
-            until=datetime(2014, 10, 27, 9, 0, 0, tzinfo=timezone.utc))
+            until=datetime(2014, 10, 27, 10, 0, 0, tzinfo=timezone.utc))
         self.assertEqual(total_units, Decimal('4.0'))
         total_units = get_security_units_for_portfolio(
             self.portfolio, self.sec,
-            until=datetime(2014, 10, 28, 9, 0, 0, tzinfo=timezone.utc))
+            until=datetime(2014, 10, 29, 9, 0, 0, tzinfo=timezone.utc))
         self.assertEqual(total_units, Decimal('2.5'))
