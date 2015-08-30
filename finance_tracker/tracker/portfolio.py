@@ -9,7 +9,9 @@ def get_position_last_value(position):
     return value
 
 
-def get_security_units_for_portfolio(portfolio, security):
-    agg = Position.objects.filter(portfolio=portfolio, security=security) \
-                          .aggregate(total_units=Sum('units'))
+def get_security_units_for_portfolio(portfolio, security, until=None):
+    qs = Position.objects.filter(portfolio=portfolio, security=security)
+    if until is not None:
+        qs = qs.filter(timestamp__lte=until)
+    agg = qs.aggregate(total_units=Sum('units'))
     return agg['total_units']
