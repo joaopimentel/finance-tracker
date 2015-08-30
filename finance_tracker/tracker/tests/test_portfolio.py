@@ -17,7 +17,7 @@ from tracker.portfolio import (
 )
 
 
-class PositionTest(TestCase):
+class PortfolioTest(TestCase):
 
     def setUp(self):
         self.sec = Security.objects.create(name='sec', isin='sec')
@@ -41,6 +41,12 @@ class PositionTest(TestCase):
             SecurityDataPoint.objects.create(security=self.sec,
                                              timestamp=t,
                                              unit_value=v)
+        self.pos_timestamps = [
+            datetime(2014, 10, 24, 9, 0, 0, tzinfo=timezone.utc),
+            datetime(2014, 10, 27, 9, 0, 0, tzinfo=timezone.utc),
+            datetime(2014, 10, 28, 9, 0, 0, tzinfo=timezone.utc),
+            datetime(2014, 10, 29, 9, 0, 0, tzinfo=timezone.utc),
+        ]
 
     def test_position_value(self):
         pos = Position(
@@ -63,17 +69,11 @@ class PositionTest(TestCase):
             Decimal('-1.5'),
             Decimal('-2.0'),
         ]
-        timestamps = [
-            datetime(2014, 10, 24, 9, 0, 0, tzinfo=timezone.utc),
-            datetime(2014, 10, 27, 9, 0, 0, tzinfo=timezone.utc),
-            datetime(2014, 10, 28, 9, 0, 0, tzinfo=timezone.utc),
-            datetime(2014, 10, 29, 9, 0, 0, tzinfo=timezone.utc),
-        ]
         [Position.objects.create(security=self.sec,
                                  timestamp=t,
                                  units=u,
                                  portfolio=self.portfolio)
-            for u, t in zip(position_units, timestamps)]
+            for u, t in zip(position_units, self.pos_timestamps)]
         total_units = get_security_units_for_portfolio(
             self.portfolio, self.sec)
         self.assertEqual(total_units, Decimal('0.5'))
@@ -94,17 +94,11 @@ class PositionTest(TestCase):
             Decimal('-1.5'),
             Decimal('-2.0'),
         ]
-        timestamps = [
-            datetime(2014, 10, 24, 9, 0, 0, tzinfo=timezone.utc),
-            datetime(2014, 10, 27, 9, 0, 0, tzinfo=timezone.utc),
-            datetime(2014, 10, 28, 9, 0, 0, tzinfo=timezone.utc),
-            datetime(2014, 10, 29, 9, 0, 0, tzinfo=timezone.utc),
-        ]
         [Position.objects.create(security=self.sec,
                                  timestamp=t,
                                  units=u,
                                  portfolio=self.portfolio)
-            for u, t in zip(position_units, timestamps)]
+            for u, t in zip(position_units, self.pos_timestamps)]
         # On 2014-10-29: 0.5 * 2.5
         total_value = get_total_value_on_security(
             self.portfolio,
